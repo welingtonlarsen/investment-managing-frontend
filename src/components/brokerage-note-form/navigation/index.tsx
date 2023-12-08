@@ -27,12 +27,12 @@ const Navigation: React.FC<TProps> = ({ currentStep, steps, setCurrentStep }) =>
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
       {shouldShowPreviousButton && (
-        <Button onClick={handlePreviousClick} type="button" variant="outlined" color="error">
+        <Button onClick={handlePreviousClick} type="button" variant="outlined">
           Voltar
         </Button>
       )}
       {shouldShowNextButton && (
-        <Button onClick={handleNextClick} type="button" variant="outlined" color="success" sx={{ ml: 2 }}>
+        <Button onClick={handleNextClick} type="button" variant="outlined" sx={{ ml: 2 }}>
           Próximo
         </Button>
       )}

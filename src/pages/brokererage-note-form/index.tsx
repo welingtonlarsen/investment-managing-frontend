@@ -12,11 +12,11 @@ const BrokerageNoteFormPage = () => {
     try {
       if (formValues.id) {
         await updateNote(formValues.id, formValues);
-        navigate('/table');
+        navigate('/negociacoes');
       } else {
         await createNote(formValues);
         alert('Nota cadastrada com sucesso.');
-        navigate('/table');
+        navigate('/negociacoes');
       }
     } catch (e) {
       if (isAxiosError(e) && e.response?.status === HttpStatusCode.BadRequest) {

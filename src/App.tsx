@@ -4,46 +4,27 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
-import { createBrowserRouter, Outlet } from 'react-router-dom';
-import Header from './components/header';
+import { ThemeOptions } from '@mui/material';
+import { createBrowserRouter } from 'react-router-dom';
 import BrokerageNotesPage, { loader as brokerageNotesTableLoader } from './pages/brokerage-notes-table';
 import BrokerageNoteFormPage, { loader as brokerageNoteFormLoader } from './pages/brokererage-note-form';
+import LayoutPage from './components/layout-page';
+import Dashboard from './pages/dashboard';
+import ReportsPage from './pages/reports';
 
-export const themeOptions = {
+export const themeOptions: ThemeOptions = {
   palette: {
-    type: 'light',
+    mode: 'dark',
     primary: {
-      main: '#016F22',
+      main: '#89d4a5',
     },
     secondary: {
-      main: '#0c6924',
+      main: '#fdfffe',
     },
   },
 };
 
 const theme = createTheme(themeOptions);
-
-const LayoutPage = () => {
-  return (
-    <>
-      <Box sx={{ mb: 3 }}>
-        <Header />
-      </Box>
-      <Box
-        sx={{
-          margin: {
-            xs: 0,
-            sm: 1,
-            md: 2,
-          },
-        }}
-      >
-        <Outlet />
-      </Box>
-    </>
-  );
-};
 
 function App() {
   return (
@@ -58,17 +39,24 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-
     children: [
       {
-        path: '/table',
+        path: '/dashboard',
+        element: <Dashboard />,
+      },
+      {
+        path: '/negociacoes',
         element: <BrokerageNotesPage />,
         loader: brokerageNotesTableLoader,
       },
       {
-        path: '/form',
+        path: '/negociacoes/create',
         element: <BrokerageNoteFormPage />,
         loader: brokerageNoteFormLoader,
+      },
+      {
+        path: 'relatorios',
+        element: <ReportsPage />,
       },
     ],
   },

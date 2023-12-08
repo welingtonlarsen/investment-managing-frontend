@@ -3,7 +3,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useEffect, useState } from 'react';
-import useBrokerageNoteService from '../../service/useBrokerageService.ts';
 import { TBrokerageNote } from '../../hooks/useBrokerageNoteForm.ts';
 import { Box, Grid } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,6 +16,7 @@ import OperationalCosts from './operational-costs';
 import FinalInformation from './final-information';
 import Orders from './orders';
 import { formatToMUI } from '../../utils/date.utils.ts';
+import { getNoteById } from '../../service/api-brokerage-note.ts';
 
 type TProps = {
   brokerageNoteId: number | null;
@@ -31,13 +31,12 @@ export default function BrokerageNoteModal({
   openDeleteConfirmationModal,
 }: TProps) {
   const navigate = useNavigate();
-  const { getById } = useBrokerageNoteService();
   const [brokerageNote, setBrokerageNote] = useState<TBrokerageNote | null>(null);
 
   useEffect(() => {
     (async () => {
       if (brokerageNoteId !== null) {
-        const result = await getById(brokerageNoteId);
+        const result = await getNoteById(brokerageNoteId);
         setBrokerageNote(result.data);
       }
     })();

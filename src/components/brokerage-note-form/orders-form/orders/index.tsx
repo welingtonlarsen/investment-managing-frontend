@@ -1,12 +1,11 @@
 import { FieldArrayWithId, UseFieldArrayAppend, UseFormRegister, Control, Controller } from 'react-hook-form';
 import { TBrokerageNote, defaultOrder } from '../../../../hooks/useBrokerageNoteForm';
-import { useState, useEffect } from 'react';
 import { TStock } from '../../../../types/stock.type';
-import { useStockService } from '../../../../service/useStockService';
 import { Box, Typography, Grid, TextField, Autocomplete, IconButton } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { SelectField } from '../../@components/select-field';
 import { NumberField } from '../../@components/number-field';
+import { useLoaderData } from 'react-router-dom';
 
 type TProps = {
   fields: FieldArrayWithId<TBrokerageNote, 'orders', 'id'>[];
@@ -16,17 +15,7 @@ type TProps = {
 };
 
 export const Orders: React.FC<TProps> = ({ fields, append, register, control }) => {
-  const stockService = useStockService();
-
-  const [stocks, setStocks] = useState<TStock[]>([]);
-
-  useEffect(() => {
-    async function fetchStocks() {
-      const stocksResult = await stockService.getAllIgnoringPagination();
-      setStocks(stocksResult);
-    }
-    fetchStocks();
-  }, []);
+  const { stocks } = useLoaderData() as { stocks: TStock[] };
 
   const onIncrementOrder = () => {
     append(defaultOrder);

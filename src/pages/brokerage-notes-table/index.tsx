@@ -3,6 +3,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getAllSummariesIgnoringPagination } from '../../service/api-summaries';
 
 export default function BrokerageNotesPage() {
   const navigate = useNavigate();
@@ -19,4 +20,11 @@ export default function BrokerageNotesPage() {
       <BrokerageNotesTable />
     </Box>
   );
+}
+
+export async function loader() {
+  const brokerageNotesSummaries = await getAllSummariesIgnoringPagination();
+  return {
+    brokerageNotesSummaries,
+  };
 }

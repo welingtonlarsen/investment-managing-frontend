@@ -8,30 +8,24 @@ import Paper from '@mui/material/Paper';
 import { Box, IconButton } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useSummariesService } from '../../service/useSummariesService';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BrokerageNoteSummary } from '../../types/brokerage-notes-summaries.type';
 import SearchIcon from '@mui/icons-material/Search';
 import AlertModal from '../alert-modal';
-import useBrokerageNoteService from '../../service/useBrokerageService';
 import BrokerageNoteModal from '../brokerage-note-modal';
 import { removeTimeFromDate } from '../../utils/date.utils.ts';
 import { useBrokerageNotesTableModals } from './useBrokerageNotesTableModals.ts';
 import { formatMoney } from '../../utils/money.utils.ts';
+import { useLoaderData, useNavigate } from 'react-router-dom';
+import { deleteNote } from '../../service/api-brokerage-note.ts';
 
 export default function BrokerageNotesTable() {
-  const { deleteNote } = useBrokerageNoteService();
-  const { getAll } = useSummariesService();
+  const { brokerageNotesSummaries } = useLoaderData() as { brokerageNotesSummaries: BrokerageNoteSummary[] };
+
+  const navigate = useNavigate();
+
   const { modalsStates, dispatch } = useBrokerageNotesTableModals();
   const [showDeleteErrorAlert, setShowDeleteErrorAlert] = useState(false);
-  const [brokerageNotesSummaries, setBrokerageNotesSummaries] = useState<BrokerageNoteSummary[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      const summaries = await getAll();
-      setBrokerageNotesSummaries(summaries.items);
-    })();
-  }, []);
 
   const openDeleteConfirmationModal = (id: number) => {
     dispatch({ type: 'OPEN_DELETE_CONFIRMATION_MODAL', selectedItem: id });
@@ -53,10 +47,7 @@ export default function BrokerageNotesTable() {
     if (modalsStates.selectedItem !== null) {
       try {
         await deleteNote(modalsStates.selectedItem);
-        const updatedBrokerageNotesSummary = brokerageNotesSummaries.filter(
-          (item) => item.id !== modalsStates.selectedItem,
-        );
-        setBrokerageNotesSummaries(updatedBrokerageNotesSummary);
+        navigate('.', { replace: true });
       } catch (e) {
         setShowDeleteErrorAlert(true);
       }
